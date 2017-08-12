@@ -1,55 +1,75 @@
 /**
  * Created by Franklin on 8/11/2017.
  */
-var app = angular.module('fieldwire', ['infinite-scroll', 'FBAngular']);
+var app = angular.module('fieldwire', ['infinite-scroll', 'FBAngular'] );
 
 app.controller('imageController', function ($scope, $http, Fullscreen) {
 
     $scope.images = [];
-    var count=1;
-    $scope.start = function(){
+    var count = 1;
+    //Submit button refresh
+    $scope.start = function () {
         $scope.images = [];
         count = 1;
         console.log($scope.searchText);
         $http({
-            method:"GET",
+            method: "GET",
             url: 'https://api.imgur.com/3/gallery/search/1?q=' + $scope.searchText,
-            headers: { Authorization: 'Client-ID 4071f54a38b614d'},
+            headers: {Authorization: 'Client-ID 4071f54a38b614d'},
             json: true
-        }).then(function success(response){
-            for(var i=0;i<response.data.data.length;i++){
+        }).then(function success(response) {
+            for (var i = 0; i < response.data.data.length; i++) {
                 $scope.images.push(response.data.data[i]);
             }
             console.log(response);
             count++;
-        }, function error(response){
+        }, function error(response) {
             response.statusText;
         })
     }
-
+    //Scroll down refresh
     $scope.newPage = function () {
         $http({
-            method:"GET",
-            url: 'https://api.imgur.com/3/gallery/search/'+count+'?q=' + $scope.searchText,
-            headers: { Authorization: 'Client-ID 5a84da5f70cb884'},
+            method: "GET",
+            url: 'https://api.imgur.com/3/gallery/search/' + count + '?q=' + $scope.searchText,
+            headers: {Authorization: 'Client-ID 5a84da5f70cb884'},
             json: true
-        }).then(function success(response){
-            for(var i=0;i<response.data.data.length;i++){
+        }).then(function success(response) {
+            for (var i = 0; i < response.data.data.length; i++) {
                 $scope.images.push(response.data.data[i]);
             }
             count++;
-        }, function error(response){
+        }, function error(response) {
             response.statusText;
         })
     }
 
-    $scope.fullscreen = function(i){
+    //real-time refresh
+    $scope.refresh = function () {
+        $scope.images = [];
+        $http({
+            method: "GET",
+            url: 'https://api.imgur.com/3/gallery/search/0?q=' + $scope.searchText,
+            headers: {Authorization: 'Client-ID 5a84da5f70cb884'},
+            json: true
+        }).then(function success(response) {
+            for (var i = 0; i < response.data.data.length; i++) {
+                $scope.images.push(response.data.data[i]);
+            }
+            count++;
+        }, function error(response) {
+            response.statusText;
+        })
+    }
+    
+    $scope.fullscreen = function (i) {
         Fullscreen.enable(document.getElementById(i.id));
     }
 
-    $scope.getURL=function(i){
-        return (i.is_album) ? 'https://imgur.com/'+i.cover+'.jpg' : 'https://i.imgur.com/'+i.id + '.jpg';
+    $scope.getURL = function (i) {
+        return (i.is_album) ? 'https://imgur.com/' + i.cover + '.jpg' : 'https://i.imgur.com/' + i.id + '.jpg';
     }
 })
+
 
 

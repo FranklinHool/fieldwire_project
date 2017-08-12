@@ -1,0 +1,1 @@
+Finished the basic functionality of implementing imgur images to webapp with fullscreen and scrolling refresh. In addition, the tileset is done in a masonry format where tiles are determined by image size like in pintrest. The realtime search is implemented as well, but I kept the code in for search button searching. Working on the draggables. 
