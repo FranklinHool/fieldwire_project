@@ -6,25 +6,45 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-sanitize.min.js"></script>
+    <script src="/javascripts/angular-lazy-loader.js"></script>
     <script src="/javascripts/imgur.js"></script>
     <script src='/javascripts/ng-infinite-scroll.js'></script>
     <script src="/javascripts/angular-fullscreen.js"></script>
+    <script src="/javascripts/lvl-drag-drop.js"></script>
+    <script src="/javascripts/lvl-uuid.js"></script>
 
 </head>
 <body>
 <h1 id="title"><%= title %></h1>
 <div class="container">
-<div ng-controller="imageController">
-    <input type="text" ng-model="searchText" ng-change="refresh()">
-    <button ng-click="start()">Search</button>
-    <div class="masonry" infinite-scroll="newPage()" infinite-scroll-distance="0" >
+<div ng-controller="imageController as $ctrl">
+        <input type="text" ng-model="searchText" ng-change="refresh()">
+        <button ng-click="start()">Search</button>
+       <i class="glyphicon glyphicon-shopping-cart" id="cart" x-lvl-drop-target='true' x-on-drop='dropped(dragEl, dropEl)' ng-click="open()"></i>
+
+    <div class="masonry" infinite-scroll="newPage()" infinite-scroll-distance="0" angular-lazy-load>
         <div ng-repeat="i in images track by $index" >
-            <div id="{{i.id}}"  data-drag="true" >
-                <img data-ng-src="{{getURL(i)}}" class="item" ng-click="fullscreen(i)" drag-container="true">
-            </div>
+                <img data-ng-src="{{getURL(i)}}" class="item" ng-click="fullscreen(i)" x-lvl-draggable='true' ng-attr-id="{{i.id}}">
         </div>
     </div>
+
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-body" id="modal-body">
+            <ul>
+                <li ng-repeat="item in cart">
+                    <img data-ng-src="{{getURL(item)}}">
+                </li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="$dismiss">OK</button>
+        </div>
+    </script>
+
 </div>
 
 </div>
