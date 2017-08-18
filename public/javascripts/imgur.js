@@ -10,30 +10,11 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
     $scope.cart = [];
     var load = true;
     var count = 1;
-    var set = 0;
-    //Submit button refresh
-    // $scope.start = function () {
-    //     $scope.images = [];
-    //     count = 1;
-    //     console.log($scope.searchText);
-    //     $http({
-    //         method: "GET",
-    //         url: 'https://api.imgur.com/3/gallery/search/1?q=' + $scope.searchText,
-    //         headers: {Authorization: 'Client-ID 4071f54a38b614d'},
-    //         json: true
-    //     }).then(function success(response) {
-    //         for (var i = 0; i < response.data.data.length; i++) {
-    //             $scope.images.push(response.data.data[i]);
-    //         }
-    //         console.log(response);
-    //         count++;
-    //     }, function error(response) {
-    //         response.statusText;
-    //     })
-    // }
-    //Scroll down refresh
+    var lastIndex = 0;
+
     $scope.newPage = function () {
-         if (load == true) {
+
+         if (load == true ) {
              console.log("HERE");
             $http({
                 method: "GET",
@@ -43,21 +24,29 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
             }).then(function success(response) {
                 for (var i = 0; i < response.data.data.length; i++) {
                     images.push(response.data.data[i]);
-                    if(i<25){
+                    if(i<15){
                         $scope.imagesView.push(response.data.data[i]);
+                        lastIndex++;
                     }
                 }
                 count++;
-                set++;
                 load = !load;
+                console.log("Images: " + images.length);
+                console.log("images Viewed: " + $scope.imagesView.length);
             }, function error(response) {
                 response.statusText;
             })
         } else {
-            for (var i = 0; i < 25; i++) {
-                $scope.imagesView.push(images[i + 25 * set])
+            for (var i = 0; i < 15; i++) {
+                $scope.imagesView.push(images[i + lastIndex])
+                console.log("HERE");
             }
+            lastIndex+=15;
             load = !load;
+             console.log(images);
+
+             console.log("Images: " + images.length);
+             console.log("images Viewed: " + $scope.imagesView.length);
         }
 
 
@@ -68,6 +57,7 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
         load = false;
         images = [];
         $scope.imagesView = [];
+        lastIndex = 0;
         $http({
             method: "GET",
             url: 'https://api.imgur.com/3/gallery/search/0?q=' + $scope.searchText + '&q_type=png',
@@ -75,14 +65,16 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
             json: true
         }).then(function success(response) {
             for (var i = 0; i < response.data.data.length; i++) {
-                if(i<25){
+                if(i<15){
                     $scope.imagesView.push(response.data.data[i]);
+                    lastIndex++;
                 }
                 images.push(response.data.data[i]);
             }
             count++;
-            set++;
             load = !load;
+            console.log("Images: " + images.length);
+            console.log("images Viewed: " + $scope.imagesView.length);
         }, function error(response) {
             response.statusText;
         })
@@ -93,7 +85,7 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
     }
 
     $scope.getURL = function (i) {
-        return (i.is_album) ? 'https://imgur.com/' + i.cover + '.jpg' : 'https://i.imgur.com/' + i.id + '.jpg';
+        return (i.is_album) ? 'https://imgur.com/' + i.cover + '.png' : 'https://i.imgur.com/' + i.id + '.png';
     }
 
 
