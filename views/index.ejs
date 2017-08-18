@@ -16,17 +16,16 @@
     <script src="/javascripts/angular-fullscreen.js"></script>
     <script src="/javascripts/lvl-drag-drop.js"></script>
     <script src="/javascripts/lvl-uuid.js"></script>
-
 </head>
 <body>
 <h1 id="title"><%= title %></h1>
 <div class="container">
-<div ng-controller="imageController as $ctrl">
+<div ng-controller="imageController">
         <input type="text" ng-model="searchText" ng-change="refresh()">
         <button ng-click="start()">Search</button>
        <i class="glyphicon glyphicon-shopping-cart" id="cart" x-lvl-drop-target='true' x-on-drop='dropped(dragEl, dropEl)' ng-click="open()"></i>
 
-    <div class="masonry" infinite-scroll="newPage()" infinite-scroll-distance="0" angular-lazy-load>
+    <div  class="masonry" infinite-scroll="newPage()" infinite-scroll-distance="0" angular-lazy-load>
         <div ng-repeat="i in imagesView track by $index" >
                 <img data-ng-src="{{getURL(i)}}" class="item" ng-click="fullscreen(i)" x-lvl-draggable='true' ng-attr-id="{{i.id}}">
         </div>
@@ -41,7 +40,7 @@
             </ul>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="$dismiss">OK</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
         </div>
     </script>
 
