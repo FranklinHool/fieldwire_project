@@ -33,11 +33,14 @@
 
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-body" id="modal-body">
-            <ul>
-                <li ng-repeat="item in cart">
-                    <img data-ng-src="{{getURL(item)}}">
-                </li>
-            </ul>
+            <table>
+                <tr ng-repeat="item in items">
+                    <td>
+                        <img class="modalImage" data-ng-src="{{getURL(item)}}" ng-attr-id="{{item.id}}" ng-click="fullscreen(item)">
+                    <td>
+                    <td><button ng-click='remove($index)'>Remove</button></td>
+                </tr>
+            </table>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>

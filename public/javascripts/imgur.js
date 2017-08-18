@@ -98,6 +98,7 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
             }
         }
         console.log("The element " + dragEl + " has been dropped on " + dropEl + "!");
+        console.log($scope.cart);
     };
 
     $scope.animationsEnabled = true;
@@ -106,23 +107,40 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
             animation: $scope.animationsEnabled,
             templateUrl: 'myModalContent.html',
             controller: 'ModalInstanceCtrl',
-            controllerAs: 'scope'
+            resolve: {
+                items: function(){
+                    return $scope.cart;
+                }
+            }
         });
 
-        modalInstance.result.then(function () {
-            console.log($scope.cart);
+        modalInstance.result.then(function (cart) {
+            $scope.cart = cart;
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
         });
     };
 })
 
-app.controller('ModalInstanceCtrl', function ($uibModalInstance, $scope) {
+app.controller('ModalInstanceCtrl', function ($uibModalInstance, items, $scope, Fullscreen) {
+    $scope.items = items;
+    console.log(items);
     $scope.ok = function () {
-        console.log($scope.cart);
-        $uibModalInstance.dismiss();
+        $uibModalInstance.close($scope.items);
+
     };
 
+    $scope.getURL = function (i) {
+        return (i.is_album) ? 'https://imgur.com/' + i.cover + '.png' : 'https://i.imgur.com/' + i.id + '.png';
+    }
+
+    $scope.fullscreen = function (i) {
+        Fullscreen.enable(document.getElementById(i.id));
+    }
+
+    $scope.remove = function(i){
+        $scope.items.splice(i,1);
+    }
 });
 
 
