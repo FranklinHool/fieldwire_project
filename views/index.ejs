@@ -19,12 +19,17 @@
 </head>
 <body>
 <h1 id="title"><%= title %></h1>
-<div class="container">
-    <div ng-controller="imageController">
-        <input type="text" ng-model="searchText" ng-change="refresh()">
-        <button ng-click="start()">Search</button>
+<div ng-controller="imageController">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
         <i class="glyphicon glyphicon-shopping-cart" id="cart" x-lvl-drop-target='true'
            x-on-drop='dropped(dragEl, dropEl)' ng-click="open()"></i>
+    </div>
+</nav>
+<div class="container">
+        <input type="text" ng-model="searchText" ng-change="refresh()">
+        <button ng-click="start()">Search</button>
 
         <div class="masonry" infinite-scroll="newPage()" infinite-scroll-distance="0" angular-lazy-load>
             <div ng-repeat="i in imagesView track by $index">
