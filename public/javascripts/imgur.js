@@ -19,14 +19,14 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
             console.log("HERE");
             $http({
                 method: "GET",
-                url: 'https://api.imgur.com/3/gallery/search/' + count + '?q=' + $scope.searchText,
+                url: 'https://api.imgur.com/3/gallery/search/' + count + '?q=' + $scope.searchText + '&q_type = png',
                 headers: {Authorization: 'Client-ID 5a84da5f70cb884'},
                 json: true
             }).then(function success(response) {
                 for (var i = 0; i < response.data.data.length; i++) {
                     images.push(response.data.data[i]);
                 }
-                for(var j=0;j<response.data.data.length/2;j++){
+                for(var j=0;j<response.data.data.length/3;j++){
                     $scope.imagesView.push(images[lastIndex]);
                     lastIndex++;
                 }
@@ -64,7 +64,7 @@ app.controller('imageController', function ($scope, $http, Fullscreen, $uibModal
             for (var i = 0; i < response.data.data.length; i++) {
                 images.push(response.data.data[i]);
         }
-            for(var j=0;j<response.data.data.length/2;j++){
+            for(var j=0;j<response.data.data.length/3;j++){
                 $scope.imagesView.push(images[lastIndex]);
                 lastIndex++;
             }
